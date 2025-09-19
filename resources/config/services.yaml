@@ -1,5 +1,5 @@
 services:
-  K3Progetti\SoftwareVersion\:
+  K3Progetti\SoftwareVersionBundle\:
     resource: '../../src/'
     exclude:
       - '../../src/DependencyInjection/'
