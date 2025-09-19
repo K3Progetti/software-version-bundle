@@ -3,6 +3,7 @@
 namespace K3Progetti\SoftwareVersionBundle\Command;
 
 
+use JsonException;
 use K3Progetti\SoftwareVersionBundle\Service\ComposerInfoService;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -31,6 +32,7 @@ class SendInfoCommand extends Command
      * @param InputInterface $input
      * @param OutputInterface $output
      * @return int
+     * @throws JsonException
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
@@ -40,7 +42,7 @@ class SendInfoCommand extends Command
         $endpoint = $this->parameterBag->get('software_version.endpoint');
 
         // Recupero le informazioni
-        $info = $this->composerInfoService->getData();
+        $info = $this->composerInfoService->getInfo();
 
         $payload = [
             'project' => [
