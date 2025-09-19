@@ -15,18 +15,17 @@
     "symfony/config": "^7.3",
     "symfony/dependency-injection": "^7.3",
     "symfony/http-kernel": "^7.3",
-    "K3Progetti\\SoftwareVersionBundle\\": "src/",
-    "symfony/framework-bundle": "^7.0",
-    "symfony/http-client": "~7.0",
-    "symfony/messenger": "~7.0",
-    "symfony/redis-messenger": "~7.0",
-    "symfony/validator": "~7.0",
+    "symfony/framework-bundle": "^7.3",
+    "symfony/http-client": "~7.3",
+    "symfony/messenger": "~7.3",
+    "symfony/redis-messenger": "~7.3",
+    "symfony/validator": "~7.3",
     "symfony/security-bundle": "*",
     "symfony/serializer": "*"
   },
   "autoload": {
     "psr-4": {
-      "K3Progetti\\SoftwareVersion\\": "src/"
+      "K3Progetti\\SoftwareVersionBundle\\": "src/"
     }
   },
   "extra": {
