@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.3](https://github.com/K3Progetti/software-version-bundle/compare/v1.0.2...v1.0.3) (2025-09-19)
+
+
+### Bug Fixes
+
+* composer.json ([62bf7b7](https://github.com/K3Progetti/software-version-bundle/commit/62bf7b7745ee39758cc8fcccdb2ebf0db20b52c0))
+
 ### [1.0.2](https://github.com/K3Progetti/software-version-bundle/compare/v1.0.1...v1.0.2) (2025-09-19)
 
 
