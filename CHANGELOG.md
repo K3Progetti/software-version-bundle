@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 1.0.1 (2025-09-19)
+
+
+### Features
+
+* start ([ceb7a25](https://github.com/K3Progetti/software-version-bundle/commit/ceb7a25f394a541d7ec867c45d6cb1afc8866aff))
+
 ### [1.1.21](https://github.com/K3Progetti/jwt-bundle/compare/v1.1.20...v1.1.21) (2025-05-30)
 
 
