@@ -6,6 +6,8 @@ $bundlesFile = $projectRoot . '/config/bundles.php';
 $bundleClass = 'K3Progetti\SoftwareVersionBundle\SoftwareVersionBundle::class';
 $bundleLine = "    $bundleClass => ['all' => true],";
 
+$configTarget = $projectRoot . '/config/packages/softwareVersion.yaml';
+$configSource = __DIR__ . '/../resources/config/packages/softwareVersion.yaml.dist';
 
 function green($text): string
 {
@@ -43,6 +45,13 @@ if ($remove) {
     } else {
         echo yellow("ℹ️  SoftwareVersionBundle non presente in config/bundles.php\n");
     }
+
+    // Rimozione jwt.yaml
+    if (file_exists($configTarget)) {
+        unlink($configTarget);
+        echo green("🗑️  File softwareVersion.yaml rimosso da config/packages.\n");
+    }
+
 } else {
     // Aggiungo bundle
     if (strpos($contents, $bundleClass) === false) {
@@ -59,6 +68,18 @@ if ($remove) {
         } else {
             echo red("❌ Errore durante l'inserimento in config/bundles.php\n");
         }
+        // Copia jwt.yaml se non esiste
+        if (!file_exists($configTarget)) {
+            if (file_exists($configSource)) {
+                copy($configSource, $configTarget);
+                echo green("✅ File softwareVersion.yaml copiato in config/packages.\n");
+            } else {
+                echo red("⚠️  File sorgente softwareVersion.yaml.dist non trovato.\n");
+            }
+        } else {
+            echo yellow("ℹ️  File softwareVersion.yaml già presente in config/packages.\n");
+        }
+
     } else {
         echo yellow("ℹ️  SoftwareVersionBundle è già presente in config/bundles.php\n");
     }
