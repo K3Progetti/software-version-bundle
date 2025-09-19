@@ -21,11 +21,11 @@ class SoftwareVersionExtension extends Extension
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
 
-        $container->setParameter('jwt.secret_key', $config['secret_key']);
-        $container->setParameter('jwt.algorithm', $config['algorithm']);
-        $container->setParameter('jwt.token_ttl', $config['token_ttl']);
-        $container->setParameter('jwt.refresh_token_ttl', $config['refresh_token_ttl']);
-        $container->setParameter('jwt.time_zone', $config['time_zone']);
+//        $container->setParameter('jwt.secret_key', $config['secret_key']);
+//        $container->setParameter('jwt.algorithm', $config['algorithm']);
+//        $container->setParameter('jwt.token_ttl', $config['token_ttl']);
+//        $container->setParameter('jwt.refresh_token_ttl', $config['refresh_token_ttl']);
+//        $container->setParameter('jwt.time_zone', $config['time_zone']);
 
         // Carico il services
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../../resources/config'));
@@ -37,6 +37,6 @@ class SoftwareVersionExtension extends Extension
      */
     public function getAlias(): string
     {
-        return 'jwt';
+        return 'softwareVersion';
     }
 }
