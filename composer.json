@@ -1,0 +1,38 @@
+{
+  "name": "k3progetti/software-version-bundle",
+  "description": "Bundle Symfony per il controllo software nei nostri progetti",
+  "type": "symfony-bundle",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Mattia Vitali",
+      "email": "m.vitali@k3progetti.it"
+    }
+  ],
+  "require": {
+    "php": ">=8.2"
+  },
+  "autoload": {
+    "psr-4": {
+      "K3Progetti\\SoftwareVersion\\": "src/"
+    }
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-main": "1.0-dev"
+    }
+  },
+  "scripts": {
+    "post-install-cmd": [
+      "@php bin/register-jwt-bundle.php"
+    ],
+    "post-update-cmd": [
+      "@php bin/register-jwt-bundle.php"
+    ],
+    "pre-package-uninstall": [
+      "@php bin/register-jwt-bundle.php --remove"
+    ]
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true
+}

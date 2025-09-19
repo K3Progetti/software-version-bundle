@@ -1,0 +1,11 @@
+services:
+  K3Progetti\SoftwareVersion\:
+    resource: '../../src/'
+    exclude:
+      - '../../src/DependencyInjection/'
+      - '../../src/Entity/'
+      - '../../src/Tests/'
+      - '../../src/Event/'
+    autowire: true
+    autoconfigure: true
+    public: true
