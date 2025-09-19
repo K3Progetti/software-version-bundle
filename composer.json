@@ -14,9 +14,7 @@
     "symfony/http-foundation": "^7.3",
     "symfony/config": "^7.3",
     "symfony/dependency-injection": "^7.3",
-    "symfony/http-kernel": "^7.3"
-  },
-  "autoload": {
+    "symfony/http-kernel": "^7.3",
     "K3Progetti\\SoftwareVersionBundle\\": "src/",
     "symfony/framework-bundle": "^7.0",
     "symfony/http-client": "~7.0",
@@ -25,6 +23,11 @@
     "symfony/validator": "~7.0",
     "symfony/security-bundle": "*",
     "symfony/serializer": "*"
+  },
+  "autoload": {
+    "psr-4": {
+      "K3Progetti\\SoftwareVersion\\": "src/"
+    }
   },
   "extra": {
     "branch-alias": {
