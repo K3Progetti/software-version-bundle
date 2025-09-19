@@ -24,7 +24,7 @@ final class SoftwareVersionExtension extends Extension
 
         // Usa il path corretto a seconda di come hai nominato la cartella:
         // Se è "Resources/config":
-        $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../../Resources/config'));
+        $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../../resources/config'));
         // Se invece hai realmente "resources/config", usa la riga sotto e commenta la precedente:
         // $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../../resources/config'));
 
