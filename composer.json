@@ -32,6 +32,15 @@
     }
   },
   "scripts": {
+    "post-install-cmd": [
+      "@php bin/register-software-version-bundle.php"
+    ],
+    "post-update-cmd": [
+      "@php bin/register-software-version-bundle.php"
+    ],
+    "pre-package-uninstall": [
+      "@php bin/register-software-version-bundle.php --remove"
+    ]
   },
   "minimum-stability": "dev",
   "prefer-stable": true
