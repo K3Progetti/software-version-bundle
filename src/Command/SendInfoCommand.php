@@ -37,7 +37,7 @@ class SendInfoCommand extends Command
         $io = new SymfonyStyle($input, $output);
         $io->title('Invio le informazioni del progetto');
 
-        $endpoint = $this->parameterBag->get('endpoint');
+        $endpoint = $this->parameterBag->get('software_version.endpoint');
 
         // Recupero le informazioni
         $info = $this->composerInfoService->getData();
