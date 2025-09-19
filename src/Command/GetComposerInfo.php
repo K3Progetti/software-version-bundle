@@ -1,8 +1,9 @@
 <?php
 
-namespace K3Progetti\SoftwareVersiondle\Command;
+namespace K3Progetti\SoftwareVersionBundle\Command;
 
 use JsonException;
+use K3Progetti\SoftwareVersionBundle\Service\ComposerInfoService;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;

@@ -1,6 +1,6 @@
 <?php
 
-namespace K3Progetti\SoftwareVersiondle;
+namespace K3Progetti\SoftwareVersionBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 

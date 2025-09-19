@@ -1,6 +1,6 @@
 <?php
 
-namespace K3Progetti\SoftwareVersiondle\Command;
+namespace K3Progetti\SoftwareVersionBundle\Command;
 
 
 use Symfony\Component\Console\Attribute\AsCommand;

@@ -1,6 +1,6 @@
 <?php
 
-namespace K3Progetti\SoftwareVersiondle\Service;
+namespace K3Progetti\SoftwareVersionBundle\Service;
 
 use Symfony\Component\HttpKernel\KernelInterface;
 

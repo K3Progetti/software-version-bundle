@@ -1,6 +1,6 @@
 <?php
 
-namespace K3Progetti\SoftwareVersiondle\DependencyInjection;
+namespace K3Progetti\SoftwareVersionBundle\DependencyInjection;
 
 use Exception;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;

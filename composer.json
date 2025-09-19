@@ -10,12 +10,21 @@
     }
   ],
   "require": {
-    "php": ">=8.2"
+    "php": ">=8.2",
+    "symfony/http-foundation": "^7.3",
+    "symfony/config": "^7.3",
+    "symfony/dependency-injection": "^7.3",
+    "symfony/http-kernel": "^7.3"
   },
   "autoload": {
-    "psr-4": {
-      "K3Progetti\\SoftwareVersion\\": "src/"
-    }
+    "K3Progetti\\SoftwareVersionBundle\\": "src/",
+    "symfony/framework-bundle": "^7.0",
+    "symfony/http-client": "~7.0",
+    "symfony/messenger": "~7.0",
+    "symfony/redis-messenger": "~7.0",
+    "symfony/validator": "~7.0",
+    "symfony/security-bundle": "*",
+    "symfony/serializer": "*"
   },
   "extra": {
     "branch-alias": {
@@ -23,15 +32,6 @@
     }
   },
   "scripts": {
-    "post-install-cmd": [
-      "@php bin/register-jwt-bundle.php"
-    ],
-    "post-update-cmd": [
-      "@php bin/register-jwt-bundle.php"
-    ],
-    "pre-package-uninstall": [
-      "@php bin/register-jwt-bundle.php --remove"
-    ]
   },
   "minimum-stability": "dev",
   "prefer-stable": true

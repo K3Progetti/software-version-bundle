@@ -1,6 +1,6 @@
 <?php
 
-namespace K3Progetti\SoftwareVersiondle\DependencyInjection;
+namespace K3Progetti\SoftwareVersionBundle\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
