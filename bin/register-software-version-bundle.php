@@ -6,8 +6,8 @@ $bundlesFile = $projectRoot . '/config/bundles.php';
 $bundleClass = 'K3Progetti\SoftwareVersionBundle\SoftwareVersionBundle::class';
 $bundleLine = "    $bundleClass => ['all' => true],";
 
-$configTarget = $projectRoot . '/config/packages/softwareVersion.yaml';
-$configSource = __DIR__ . '/../resources/config/packages/softwareVersion.yaml.dist';
+$configTarget = $projectRoot . '/config/packages/software_version.yaml';
+$configSource = __DIR__ . '/../resources/config/packages/software_version.yaml.dist';
 
 function green($text): string
 {
@@ -74,7 +74,7 @@ if ($remove) {
                 copy($configSource, $configTarget);
                 echo green("✅ File softwareVersion.yaml copiato in config/packages.\n");
             } else {
-                echo red("⚠️  File sorgente softwareVersion.yaml.dist non trovato.\n");
+                echo red("⚠️  File sorgente software_version.yaml.dist non trovato.\n");
             }
         } else {
             echo yellow("ℹ️  File softwareVersion.yaml già presente in config/packages.\n");
