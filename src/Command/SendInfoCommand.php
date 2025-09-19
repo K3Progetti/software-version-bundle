@@ -3,12 +3,13 @@
 namespace K3Progetti\SoftwareVersionBundle\Command;
 
 
+use K3Progetti\SoftwareVersionBundle\Service\ComposerInfoService;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\HttpFoundation\Session\Attribute\AttributeBagInterface;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 /**
  * @property $httpClient
@@ -19,7 +20,7 @@ class SendInfoCommand extends Command
 
 
     public function __construct(
-        private readonly AttributeBagInterface $attributeBag,
+        private readonly ParameterBagInterface $parameterBag,
         private readonly ComposerInfoService   $composerInfoService
     )
     {
@@ -36,7 +37,7 @@ class SendInfoCommand extends Command
         $io = new SymfonyStyle($input, $output);
         $io->title('Invio le informazioni del progetto');
 
-        $endpoint = $this->attributeBag->get('endpoint');
+        $endpoint = $this->parameterBag->get('endpoint');
 
         // Recupero le informazioni
         $info = $this->composerInfoService->getData();
