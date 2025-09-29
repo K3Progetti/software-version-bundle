@@ -13,7 +13,7 @@ class Configuration implements ConfigurationInterface
 
         $treeBuilder->getRootNode()
             ->children()
-            ->scalarNode('endpoint')->defaultValue('https://api.softwareversion.k3progettti.it')->end()
+            ->scalarNode('endpoint')->defaultValue('https://api.software-version.k3progetti.it')->end()
             ->end();
 
         return $treeBuilder;
