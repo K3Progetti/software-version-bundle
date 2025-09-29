@@ -21,7 +21,8 @@
     "symfony/redis-messenger": "~7.3",
     "symfony/validator": "~7.3",
     "symfony/security-bundle": "*",
-    "symfony/serializer": "*"
+    "symfony/serializer": "*",
+    "ext-curl": "*"
   },
   "autoload": {
     "psr-4": {
