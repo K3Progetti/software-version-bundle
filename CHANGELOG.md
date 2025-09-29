@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.19](https://github.com/K3Progetti/software-version-bundle/compare/v1.0.18...v1.0.19) (2025-09-29)
+
+
+### Bug Fixes
+
+* url ([0369b0f](https://github.com/K3Progetti/software-version-bundle/commit/0369b0fcaf6b6a5b17ea237d0f71f2e75b54ed5b))
+
 ### [1.0.18](https://github.com/K3Progetti/software-version-bundle/compare/v1.0.17...v1.0.18) (2025-09-29)
 
 
