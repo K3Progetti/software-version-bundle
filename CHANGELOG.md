@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.21](https://github.com/K3Progetti/software-version-bundle/compare/v1.0.20...v1.0.21) (2025-09-30)
+
+
+### Features
+
+* read and send appSecret ([0d469da](https://github.com/K3Progetti/software-version-bundle/commit/0d469da90a6ea6cc56073c86aa3a7cff22bc59ed))
+
 ### [1.0.20](https://github.com/K3Progetti/software-version-bundle/compare/v1.0.19...v1.0.20) (2025-09-30)
 
 
