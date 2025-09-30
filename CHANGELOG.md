@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.22](https://github.com/K3Progetti/software-version-bundle/compare/v1.0.21...v1.0.22) (2025-09-30)
+
+
+### Features
+
+* add_secret ([4c33a8f](https://github.com/K3Progetti/software-version-bundle/commit/4c33a8ffc72582bc82997474b10d17b162597b8c))
+
 ### [1.0.21](https://github.com/K3Progetti/software-version-bundle/compare/v1.0.20...v1.0.21) (2025-09-30)
 
 
