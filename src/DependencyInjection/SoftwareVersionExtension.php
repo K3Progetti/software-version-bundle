@@ -21,6 +21,7 @@ final class SoftwareVersionExtension extends Extension
 
         // param naming consigliato in snake_case
         $container->setParameter('software_version.endpoint', $config['endpoint']);
+        $container->setParameter('software_version.app_secret', $config['app_secret']);
 
         // Usa il path corretto a seconda di come hai nominato la cartella:
         // Se è "Resources/config":

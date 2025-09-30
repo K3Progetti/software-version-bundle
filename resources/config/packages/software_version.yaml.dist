@@ -1,3 +1,4 @@
 # Configurazione per software version
 software_version:
   endpoint: 'https://api.software-version.k3progetti.it/public/software'
+  app_secret: '%env(APP_SECRET)%'

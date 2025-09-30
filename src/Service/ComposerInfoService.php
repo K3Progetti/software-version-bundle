@@ -4,15 +4,13 @@ namespace K3Progetti\SoftwareVersionBundle\Service;
 
 use Composer\InstalledVersions;
 use JsonException;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Throwable;
 
 final class ComposerInfoService
 {
     public function __construct(
-        private KernelInterface       $kernel,
-        private ParameterBagInterface $params
+        private KernelInterface $kernel
     )
     {
     }
@@ -49,18 +47,13 @@ final class ComposerInfoService
             }
         }
 
-
-        // Leggi APP_SECRET
-        $appSecret = $this->params->get('env(APP_SECRET)');
-
         return [
             'name' => str_replace('template/', '', $name),
             'description' => $description,
             'phpRequirement' => $phpReq,
             'symfonyRequirement' => $symfonyReq,
             'symfonyInstalledVersion' => $symfonyInstalled,
-            'phpInstalledVersion' => PHP_VERSION,
-            'appSecret' => $appSecret,
+            'phpInstalledVersion' => PHP_VERSION
         ];
     }
 }
