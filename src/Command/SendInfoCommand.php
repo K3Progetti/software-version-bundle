@@ -52,20 +52,11 @@ class SendInfoCommand extends Command
             CURLOPT_POST => true,
             CURLOPT_HTTPHEADER => ['Content-Type: application/json'],
             CURLOPT_POSTFIELDS => json_encode($payload),
-            // Robustezza TLS/SNI
             CURLOPT_SSL_VERIFYHOST => 2,
             CURLOPT_SSL_VERIFYPEER => true,
-            // Se il tuo ambiente ha reverse/proxy “capricciosi”, prova a forzare TLS1.2:
-            // CURLOPT_SSLVERSION     => CURL_SSLVERSION_TLSv1_2,
-
-            // Evita negoziazioni HTTP/2 strane con cert/proxy vecchi
             CURLOPT_HTTP_VERSION   => CURL_HTTP_VERSION_1_1,
-
-            // Timeout
             CURLOPT_CONNECTTIMEOUT => 10,
             CURLOPT_TIMEOUT        => 20,
-
-            // Debug utile
             CURLINFO_HEADER_OUT    => true,
         ]);
 
