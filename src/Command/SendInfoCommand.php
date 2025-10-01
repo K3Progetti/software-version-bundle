@@ -43,6 +43,7 @@ class SendInfoCommand extends Command
 
         // Recupero le informazioni
         $payload = $this->composerInfoService->getInfo();
+        $payload['appSecret'] = $this->parameterBag->get('software_version.app_secret');
 
         $ch = curl_init();
 
