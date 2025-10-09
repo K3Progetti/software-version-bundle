@@ -17,8 +17,6 @@
     "symfony/http-kernel": "^7.3",
     "symfony/framework-bundle": "^7.3",
     "symfony/http-client": "~7.3",
-    "symfony/messenger": "~7.3",
-    "symfony/redis-messenger": "~7.3",
     "symfony/validator": "~7.3",
     "symfony/security-bundle": "*",
     "symfony/serializer": "*",

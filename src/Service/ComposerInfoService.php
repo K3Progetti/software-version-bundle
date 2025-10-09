@@ -33,6 +33,11 @@ final class ComposerInfoService
             $symfonyReq = $json['extra']['symfony']['require']
                 ?? $json['require']['symfony/framework-bundle']
                 ?? null;
+            $customerPermalink = $json['extra']['customer-permalink'];
+            $softwareVersionBundle = $json['require']['k3progetti/software-version-bundle'];
+            $mercureBridgeBundle = $json['require']['k3progetti/mercure-bridge-bundle'];
+            $jwtBundle = $json['require']['k3progetti/jwt-bundle'];
+            $microsoftBundle = $json['require']['k3progetti/microsoft-bundle'];
         }
 
         if (class_exists(InstalledVersions::class)) {
@@ -53,7 +58,12 @@ final class ComposerInfoService
             'phpRequirement' => $phpReq,
             'symfonyRequirement' => $symfonyReq,
             'symfonyInstalledVersion' => $symfonyInstalled,
-            'phpInstalledVersion' => PHP_VERSION
+            'phpInstalledVersion' => PHP_VERSION,
+            'customerPermalink' => $customerPermalink,
+            'softwareVersionBundle' => $softwareVersionBundle,
+            'mercureBridgeBundle' => $mercureBridgeBundle,
+            'jwtBundle' => $jwtBundle,
+            'microsoftBundle' => $microsoftBundle
         ];
     }
 }
