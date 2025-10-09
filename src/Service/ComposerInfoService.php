@@ -24,6 +24,8 @@ final class ComposerInfoService
         $path = $this->kernel->getProjectDir() . '/composer.json';
 
         $name = $description = $phpReq = $symfonyReq = $symfonyInstalled = null;
+        $customerPermalink = $softwareVersionBundle = $mercureBridgeBundle = $jwtBundle = $microsoftBundle = null;
+
 
         if (is_file($path)) {
             $json = json_decode((string)file_get_contents($path), true, 512, JSON_THROW_ON_ERROR);
@@ -33,11 +35,11 @@ final class ComposerInfoService
             $symfonyReq = $json['extra']['symfony']['require']
                 ?? $json['require']['symfony/framework-bundle']
                 ?? null;
-            $customerPermalink = $json['extra']['customer-permalink'];
-            $softwareVersionBundle = $json['require']['k3progetti/software-version-bundle'];
-            $mercureBridgeBundle = $json['require']['k3progetti/mercure-bridge-bundle'];
-            $jwtBundle = $json['require']['k3progetti/jwt-bundle'];
-            $microsoftBundle = $json['require']['k3progetti/microsoft-bundle'];
+            $customerPermalink = $json['extra']['customer-permalink'] ?? null;
+            $softwareVersionBundle = $json['require']['k3progetti/software-version-bundle'] ?? null;
+            $mercureBridgeBundle = $json['require']['k3progetti/mercure-bridge-bundle'] ?? null;
+            $jwtBundle = $json['require']['k3progetti/jwt-bundle'] ?? null;
+            $microsoftBundle = $json['require']['k3progetti/microsoft-bundle'] ?? null;
         }
 
         if (class_exists(InstalledVersions::class)) {
