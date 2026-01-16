@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.0.0](https://github.com/K3Progetti/software-version-bundle/compare/v1.1.1...v2.0.0) (2026-01-16)
+
+
+### Features
+
+* update version 8 symfony ([8361b56](https://github.com/K3Progetti/software-version-bundle/commit/8361b566ec1596933c8fee4afbfa8afe75eb1b6a))
+
 ### [1.1.1](https://github.com/K3Progetti/software-version-bundle/compare/v1.1.0...v1.1.1) (2025-10-09)
 
 
