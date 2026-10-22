@@ -78,3 +78,18 @@ che usa la sincronizzazione da GitHub.
 |---|---|
 | `software-version:send-info` | Manda PHP e Symfony al server. Senza `SOFTWARE_VERSION_KEY` non fa niente |
 | `software-version:get-composer-info` | Mostra cosa manderebbe, senza mandarlo |
+
+---
+
+## ⬆️ Dalla 2.x alla 3.0
+
+- `app_secret` non c'è più: la 2.x mandava fuori l'`APP_SECRET` del progetto, la 3.0 usa la chiave
+  dell'azienda in `SOFTWARE_VERSION_KEY`. Togli `app_secret` da `config/packages/software_version.yaml`.
+- Manda solo `name`, `phpVersion` e `symfonyVersion`: il resto (bundle, requisiti, cliente) lo legge già
+  la sincronizzazione da GitHub.
+- Requisiti allargati: si installa anche sui progetti vecchi (PHP 7.2.5+, Symfony 5.4+).
+
+## 🧪 Provato su
+
+- PHP 7.2.34 + Symfony 5.4.54
+- PHP 8.4.27 + Symfony 8.1.9
