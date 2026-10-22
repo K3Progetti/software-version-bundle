@@ -2,44 +2,43 @@
 
 namespace K3Progetti\SoftwareVersionBundle\Command;
 
-use JsonException;
 use K3Progetti\SoftwareVersionBundle\Service\ComposerInfoService;
-use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-#[AsCommand(name: 'software-version:get-composer-info', description: 'Restituisce le informazioni del composer')]
+/**
+ * Fa vedere cosa manderebbe send-info, senza mandarlo
+ */
 class GetComposerInfo extends Command
 {
+    /** @var ComposerInfoService */
+    private $composerInfoService;
 
-    protected static $defaultName = 'fai-filtri:create-user';
-
-    public function __construct(
-        private readonly ComposerInfoService $composerInfoService,
-    )
+    public function __construct(ComposerInfoService $composerInfoService)
     {
+        $this->composerInfoService = $composerInfoService;
         parent::__construct();
     }
 
-    /**
-     * @param InputInterface $input
-     * @param OutputInterface $output
-     * @return int
-     * @throws JsonException
-     */
+    protected function configure(): void
+    {
+        $this->setName('software-version:get-composer-info');
+        $this->setDescription('Mostra cosa verrebbe mandato al server delle versioni');
+    }
+
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
-        $io->title('Recupera le informazioni del composer');
+        $info = $this->composerInfoService->getInfo();
 
-        $data = $this->composerInfoService->getInfo();
+        $rows = [];
+        foreach ($info as $key => $value) {
+            $rows[] = [$key, $value === null ? '-' : $value];
+        }
+        $io->table(['Campo', 'Valore'], $rows);
 
-        print_r($data);
-
-        return Command::SUCCESS;
+        return 0;
     }
-
-
 }

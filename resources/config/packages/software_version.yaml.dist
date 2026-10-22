@@ -1,4 +1,4 @@
-# Configurazione per software version
+# Configurazione per software version. La chiave dell'azienda va nel .env come SOFTWARE_VERSION_KEY
+# (la dà il server delle versioni): qui non serve scriverla
 software_version:
   endpoint: 'https://api.software-version.k3progetti.it/public/software'
-  app_secret: '%env(APP_SECRET)%'

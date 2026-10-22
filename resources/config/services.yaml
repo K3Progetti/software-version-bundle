@@ -1,11 +1,15 @@
 services:
-  K3Progetti\SoftwareVersionBundle\:
-    resource: '../../src/'
-    exclude:
-      - '../../src/DependencyInjection/'
-      - '../../src/Entity/'
-      - '../../src/Tests/'
-      - '../../src/Event/'
+  _defaults:
     autowire: true
     autoconfigure: true
-    public: true
+
+  K3Progetti\SoftwareVersionBundle\Service\ComposerInfoService: ~
+
+  K3Progetti\SoftwareVersionBundle\Command\GetComposerInfo:
+    tags: [ console.command ]
+
+  K3Progetti\SoftwareVersionBundle\Command\SendInfoCommand:
+    arguments:
+      $endpoint: '%software_version.endpoint%'
+      $key: '%software_version.key%'
+    tags: [ console.command ]

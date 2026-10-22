@@ -3,69 +3,80 @@
 namespace K3Progetti\SoftwareVersionBundle\Service;
 
 use Composer\InstalledVersions;
-use JsonException;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Throwable;
 
+/**
+ * Cosa gira davvero in questo progetto: PHP del processo e Symfony installato in vendor.
+ * Scritto per PHP 7.2 apposta (niente typed properties, arrow function, str_contains...):
+ * deve andare anche sui progetti vecchi, sono quelli che ci interessano di più
+ */
 final class ComposerInfoService
 {
-    public function __construct(
-        private KernelInterface $kernel
-    )
+    /** @var KernelInterface */
+    private $kernel;
+
+    public function __construct(KernelInterface $kernel)
     {
+        $this->kernel = $kernel;
     }
 
-    /**
-     * @return array
-     * @throws JsonException
-     */
     public function getInfo(): array
     {
+        $name = null;
         $path = $this->kernel->getProjectDir() . '/composer.json';
-
-        $name = $description = $phpReq = $symfonyReq = $symfonyInstalled = null;
-        $customerPermalink = $softwareVersionBundle = $mercureBridgeBundle = $jwtBundle = $microsoftBundle = null;
-
-
         if (is_file($path)) {
-            $json = json_decode((string)file_get_contents($path), true, 512, JSON_THROW_ON_ERROR);
-            $name = $json['name'] ?? null;
-            $description = $json['description'] ?? null;
-            $phpReq = $json['require']['php'] ?? null;
-            $symfonyReq = $json['extra']['symfony']['require']
-                ?? $json['require']['symfony/framework-bundle']
-                ?? null;
-            $customerPermalink = $json['extra']['customer-permalink'] ?? null;
-            $softwareVersionBundle = $json['require']['k3progetti/software-version-bundle'] ?? null;
-            $mercureBridgeBundle = $json['require']['k3progetti/mercure-bridge-bundle'] ?? null;
-            $jwtBundle = $json['require']['k3progetti/jwt-bundle'] ?? null;
-            $microsoftBundle = $json['require']['k3progetti/microsoft-bundle'] ?? null;
-        }
-
-        if (class_exists(InstalledVersions::class)) {
-            try {
-                $pkg = 'symfony/framework-bundle';
-                if (InstalledVersions::isInstalled($pkg)) {
-                    $symfonyInstalled = InstalledVersions::getPrettyVersion($pkg);
-                } elseif (InstalledVersions::isInstalled('symfony/http-kernel')) {
-                    $symfonyInstalled = InstalledVersions::getPrettyVersion('symfony/http-kernel');
-                }
-            } catch (Throwable) {
+            $json = json_decode((string)file_get_contents($path), true);
+            if (is_array($json) && isset($json['name'])) {
+                // Come la sync del server, che il progetto lo ritrova per nome
+                $name = str_replace('template/', '', (string)$json['name']);
             }
         }
 
         return [
-            'name' => str_replace('template/', '', $name),
-            'description' => $description,
-            'phpRequirement' => $phpReq,
-            'symfonyRequirement' => $symfonyReq,
-            'symfonyInstalledVersion' => $symfonyInstalled,
-            'phpInstalledVersion' => PHP_VERSION,
-            'customerPermalink' => $customerPermalink,
-            'softwareVersionBundle' => $softwareVersionBundle,
-            'mercureBridgeBundle' => $mercureBridgeBundle,
-            'jwtBundle' => $jwtBundle,
-            'microsoftBundle' => $microsoftBundle
+            'name' => $name,
+            'phpVersion' => PHP_VERSION,
+            'symfonyVersion' => $this->installedVersion('symfony/framework-bundle')
+                ?: $this->installedVersion('symfony/http-kernel')
+                ?: $this->kernelVersion(),
         ];
+    }
+
+    /**
+     * Da Composer 2 c'è InstalledVersions, con Composer 1 leggo installed.json a mano
+     */
+    private function installedVersion(string $package): ?string
+    {
+        if (class_exists(InstalledVersions::class)) {
+            try {
+                if (InstalledVersions::isInstalled($package)) {
+                    return InstalledVersions::getPrettyVersion($package);
+                }
+            } catch (Throwable $e) {
+                // Proseguo con installed.json
+            }
+        }
+
+        $path = $this->kernel->getProjectDir() . '/vendor/composer/installed.json';
+        if (!is_file($path)) {
+            return null;
+        }
+        $installed = json_decode((string)file_get_contents($path), true);
+        // Composer 2: {"packages": [...]}, Composer 1: direttamente la lista
+        $packages = isset($installed['packages']) ? $installed['packages'] : $installed;
+        foreach (is_array($packages) ? $packages : [] as $item) {
+            if (isset($item['name'], $item['version']) && $item['name'] === $package) {
+                return $item['version'];
+            }
+        }
+
+        return null;
+    }
+
+    private function kernelVersion(): ?string
+    {
+        $kernel = 'Symfony\Component\HttpKernel\Kernel';
+
+        return defined($kernel . '::VERSION') ? constant($kernel . '::VERSION') : null;
     }
 }

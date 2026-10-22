@@ -1,123 +1,80 @@
-# Software Version
+# Software Version Bundle
 
-Bundle Symfony per la gestione avanzata dei token JWT, con supporto a:
+Manda al server delle versioni (l'app **Versioni software**) cosa gira **davvero** nel progetto:
+il PHP del processo (`PHP_VERSION`) e il Symfony installato in `vendor`.
 
-- Login e generazione token JWT
-- Refresh token
-- Logout e invalidazione dei token
-- Comandi da terminale per la pulizia dei token scaduti
+GitHub dice com'è il codice e Docker Hub com'è l'immagine adesso, ma solo il progetto sa cosa è
+stato rilasciato: un'immagine ricompilata e non ancora rilasciata non cambia niente sul server.
 
 ---
 
 ## ✅ Requisiti
 
-- PHP >= 8.2
-- Symfony 7.0
+Apposta larghi, perché serve soprattutto sui progetti vecchi:
+
+- PHP >= 7.2.5 con `ext-curl` ed `ext-json`
+- Symfony 5.4, 6.x, 7.x o 8.x
 
 ---
 
 ## 🚀 Installazione
 
 ```bash
-composer require k3progetti/jwt-bundle
+composer require k3progetti/software-version-bundle
 ```
 
-```bash
-php composer.phar install --ignore-platform-req=ext-redis
-```
-
----
-
-## ⚙️ Configurazione
-
-### 📦 Registrazione del bundle
-
-Aggiungi il bundle al tuo `config/bundles.php` se non viene registrato automaticamente:
+In `config/bundles.php`, se non c'è già:
 
 ```php
-return [
-    // ...
-    K3Progetti\JwtBundle\SoftwareVersionBundle::class => ['all' => true],
-];
+K3Progetti\SoftwareVersionBundle\SoftwareVersionBundle::class => ['all' => true],
 ```
 
-### 🔐 Configurazione del firewall (`config/packages/security.yaml`)
+Nel `.env` (o nelle variabili del container) la chiave della tua azienda:
+
+```dotenv
+SOFTWARE_VERSION_KEY=svk_...
+```
+
+La chiave è una per azienda e la trovi sul server delle versioni:
+
+```bash
+php bin/console software-version:company-key <id-azienda>
+```
+
+> Non è `APP_SECRET`: quello non deve uscire dal progetto. Se un giorno la chiave va cambiata
+> (`--new`), quella vecchia smette di funzionare per tutti i progetti dell'azienda.
+
+### Configurazione (facoltativa)
+
+Serve solo per cambiare l'indirizzo del server, `config/packages/software_version.yaml`:
 
 ```yaml
-firewalls:
-    api:
-        pattern: ^/api/
-        stateless: true
-        custom_authenticator: K3Progetti\JwtBundle\Security\JwtAuthenticator
+software_version:
+  endpoint: 'https://api.software-version.k3progetti.it/public/software'
 ```
 
 ---
 
-### 🧱 Migrazioni
+## ⏱️ Quando mandarlo
 
-Il bundle include due entità: `JwtToken` e `JwtRefreshToken`.  
-Dopo aver installato il bundle, **genera e applica le migrazioni**:
+- **All'avvio del container**, così il server sa quando è stato fatto il rilascio. Nell'entrypoint:
 
-```bash
-php bin/console make:migration
-php bin/console doctrine:migrations:migrate
-```
+  ```bash
+  php bin/console software-version:send-info || true
+  ```
 
----
+  Il `|| true` è voluto: se il server delle versioni non risponde il deploy deve andare avanti lo stesso.
 
-## 🧭 Struttura del Progetto
+- **Una volta al giorno** da cron, per sapere che il progetto è ancora vivo.
 
-```
-JwtBundle/
-├── JwtBundle.php
-├── bin/
-│   └── register-jwt-bundle.php
-├── resources/
-│   └── config/
-│       └── services.yaml
-├── src/
-│   ├── Command/
-│   │   ├── RemoveJwtRefreshTokenExpired.php
-│   │   ├── RemoveJwtTokenExpired.php
-│   │   └── RemoveJwtTokenUser.php
-│   ├── Controller/
-│   │   └── AuthController.php
-│   ├── DependencyInjection/
-│   │   ├── Configuration.php
-│   │   └── JwtExtension.php
-│   ├── Entity/
-│   │   ├── JwtToken.php
-│   │   └── JwtRefreshToken.php
-│   ├── Event/
-│   │   └── JwtUserLoggedOutEvent.php
-│   ├── Helper/
-│   │   └── AuthHelper.php
-│   ├── Repository/
-│   │   ├── JwtTokenRepository.php
-│   │   └── JwtRefreshTokenRepository.php
-│   ├── Security/
-│   │   ├── JwtAuthenticator.php
-│   │   └── Handler/
-│   │       ├── LoginHandler.php
-│   │       ├── LogoutHandler.php
-│   │       └── RefreshTokenHandler.php
-│   └── Service/
-│       ├── JwtService.php
-│       └── JwtRefreshService.php
-```
+Il progetto viene riconosciuto dal `name` del `composer.json` (senza `template/` davanti), lo stesso
+che usa la sincronizzazione da GitHub.
 
 ---
 
-## 🔧 Comandi Console Disponibili
+## 🧰 Comandi
 
-```bash
-bin/console jwt:remove-jwt-refresh-token-expired
-bin/console jwt:remove-jwt-token-expired
-bin/console jwt:remove-jwt-token-user
-```
-
----
-
-## 🤝 Contributi
-
-Sono aperto a qualsiasi confronto.
+| Comando | Cosa fa |
+|---|---|
+| `software-version:send-info` | Manda PHP e Symfony al server. Senza `SOFTWARE_VERSION_KEY` non fa niente |
+| `software-version:get-composer-info` | Mostra cosa manderebbe, senza mandarlo |
