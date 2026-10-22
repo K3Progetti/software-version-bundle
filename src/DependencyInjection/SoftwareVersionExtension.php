@@ -18,6 +18,8 @@ final class SoftwareVersionExtension extends Extension
 
         $container->setParameter('software_version.endpoint', $config['endpoint']);
         $container->setParameter('software_version.key', $config['key']);
+        $container->setParameter('software_version.auto_send', $config['auto_send']);
+        $container->setParameter('software_version.interval', $config['interval']);
 
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../../resources/config'));
         $loader->load('services.yaml');

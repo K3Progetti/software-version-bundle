@@ -2,32 +2,24 @@
 
 namespace K3Progetti\SoftwareVersionBundle\Command;
 
-use K3Progetti\SoftwareVersionBundle\Service\ComposerInfoService;
+use K3Progetti\SoftwareVersionBundle\Service\InfoSender;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
- * Manda al server delle versioni cosa gira qui. Da lanciare all'avvio del container
- * e una volta al giorno: non deve mai bloccare un deploy, quindi gli errori li scrive e basta
+ * Manda subito al server delle versioni cosa gira qui. Di solito non serve, ci pensa l'invio
+ * automatico dopo le richieste: è per provare e per i progetti senza richieste web
  */
 class SendInfoCommand extends Command
 {
-    /** @var ComposerInfoService */
-    private $composerInfoService;
+    /** @var InfoSender */
+    private $sender;
 
-    /** @var string */
-    private $endpoint;
-
-    /** @var string|null */
-    private $key;
-
-    public function __construct(ComposerInfoService $composerInfoService, string $endpoint, ?string $key)
+    public function __construct(InfoSender $sender)
     {
-        $this->composerInfoService = $composerInfoService;
-        $this->endpoint = $endpoint;
-        $this->key = $key;
+        $this->sender = $sender;
         parent::__construct();
     }
 
@@ -42,57 +34,20 @@ class SendInfoCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
 
-        $key = $this->key ?: $this->envKey();
-        if (empty($key)) {
+        if ($this->sender->getKey() === null) {
             $io->warning('SOFTWARE_VERSION_KEY non impostata: non mando niente');
             return 0;
         }
 
-        $payload = $this->composerInfoService->getInfo();
-        $payload['key'] = $key;
-
-        $ch = curl_init();
-        curl_setopt_array($ch, [
-            CURLOPT_URL => $this->endpoint,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_POST => true,
-            CURLOPT_HTTPHEADER => ['Content-Type: application/json'],
-            CURLOPT_POSTFIELDS => json_encode($payload),
-            CURLOPT_CONNECTTIMEOUT => 10,
-            CURLOPT_TIMEOUT => 20,
-        ]);
-        $response = curl_exec($ch);
-        $httpCode = (int)curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        $error = curl_error($ch);
-        curl_close($ch);
-
-        if ($response === false) {
-            $io->error('Invio non riuscito: ' . $error);
-            return 1;
-        }
-        if ($httpCode < 200 || $httpCode >= 300) {
-            $body = json_decode((string)$response, true);
-            $io->error(sprintf('Invio rifiutato (%d): %s', $httpCode, isset($body['message']) ? $body['message'] : $response));
+        $result = $this->sender->send();
+        if (!$result['ok']) {
+            $io->error($result['message']);
             return 1;
         }
 
+        $payload = $result['payload'];
         $io->success(sprintf('Inviato: %s, PHP %s, Symfony %s', $payload['name'], $payload['phpVersion'], $payload['symfonyVersion'] ?: '?'));
 
         return 0;
-    }
-
-    /**
-     * Dove la mette Symfony a seconda della versione e di come è caricato il .env
-     */
-    private function envKey(): ?string
-    {
-        foreach ([$_SERVER, $_ENV] as $vars) {
-            if (!empty($vars['SOFTWARE_VERSION_KEY'])) {
-                return (string)$vars['SOFTWARE_VERSION_KEY'];
-            }
-        }
-        $value = getenv('SOFTWARE_VERSION_KEY');
-
-        return $value !== false && $value !== '' ? $value : null;
     }
 }

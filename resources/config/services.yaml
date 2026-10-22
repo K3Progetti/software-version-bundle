@@ -5,11 +5,20 @@ services:
 
   K3Progetti\SoftwareVersionBundle\Service\ComposerInfoService: ~
 
+  K3Progetti\SoftwareVersionBundle\Service\InfoSender:
+    arguments:
+      $endpoint: '%software_version.endpoint%'
+      $key: '%software_version.key%'
+
+  K3Progetti\SoftwareVersionBundle\EventSubscriber\SendInfoSubscriber:
+    arguments:
+      $cacheDir: '%kernel.cache_dir%'
+      $enabled: '%software_version.auto_send%'
+      $interval: '%software_version.interval%'
+    tags: [ kernel.event_subscriber ]
+
   K3Progetti\SoftwareVersionBundle\Command\GetComposerInfo:
     tags: [ console.command ]
 
   K3Progetti\SoftwareVersionBundle\Command\SendInfoCommand:
-    arguments:
-      $endpoint: '%software_version.endpoint%'
-      $key: '%software_version.key%'
     tags: [ console.command ]

@@ -55,17 +55,26 @@ software_version:
 
 ---
 
-## ⏱️ Quando mandarlo
+## ⏱️ Quando manda
 
-- **All'avvio del container**, così il server sa quando è stato fatto il rilascio. Nell'entrypoint:
+**Da solo, non serve nessun cron.** Dopo una richiesta HTTP, quando la risposta è già partita
+(`kernel.terminate`), manda i dati al massimo una volta all'ora. Il segno dell'ultimo invio sta nella
+cache di Symfony (`var/cache/<env>/software_version_sent`): col deploy la cache riparte vuota e la prima
+richiesta manda subito, così sul server delle versioni la data di rilascio è giusta.
 
-  ```bash
-  php bin/console software-version:send-info || true
-  ```
+Il progetto non se ne accorge: timeout di 5 secondi, errori ignorati, e se il server delle versioni è giù
+riprova all'intervallo dopo, non a ogni richiesta.
 
-  Il `|| true` è voluto: se il server delle versioni non risponde il deploy deve andare avanti lo stesso.
+Per cambiare l'intervallo o spegnerlo, `config/packages/software_version.yaml`:
 
-- **Una volta al giorno** da cron, per sapere che il progetto è ancora vivo.
+```yaml
+software_version:
+  auto_send: true   # false per spegnerlo
+  interval: 3600    # secondi, minimo 60
+```
+
+Il comando `software-version:send-info` resta per provare a mano e per i progetti **senza richieste web**
+(solo worker o comandi): lì va messo in un job di Ofelia, per esempio ogni ora.
 
 Il progetto viene riconosciuto dal `name` del `composer.json` (senza `template/` davanti), lo stesso
 che usa la sincronizzazione da GitHub.
@@ -76,7 +85,7 @@ che usa la sincronizzazione da GitHub.
 
 | Comando | Cosa fa |
 |---|---|
-| `software-version:send-info` | Manda PHP e Symfony al server. Senza `SOFTWARE_VERSION_KEY` non fa niente |
+| `software-version:send-info` | Manda subito PHP e Symfony al server. Senza `SOFTWARE_VERSION_KEY` non fa niente |
 | `software-version:get-composer-info` | Mostra cosa manderebbe, senza mandarlo |
 
 ---
@@ -90,6 +99,8 @@ che usa la sincronizzazione da GitHub.
 - Requisiti allargati: si installa anche sui progetti vecchi (PHP 7.2.5+, Symfony 5.4+).
 
 ## 🧪 Provato su
+
+Comando e invio automatico dopo una richiesta (la seconda entro l'ora non manda):
 
 - PHP 7.2.34 + Symfony 5.4.54
 - PHP 8.4.27 + Symfony 8.1.9

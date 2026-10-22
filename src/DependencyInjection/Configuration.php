@@ -18,6 +18,9 @@ class Configuration implements ConfigurationInterface
             // Di solito si lascia vuota e il comando legge SOFTWARE_VERSION_KEY quando parte: con %env()% qui,
             // se la variabile manca si romperebbe tutto bin/console, e env(default::) su Symfony 5.4 non passa
             ->scalarNode('key')->defaultNull()->end()
+            // Invio automatico dopo le richieste HTTP, così non serve il cron
+            ->booleanNode('auto_send')->defaultTrue()->end()
+            ->integerNode('interval')->defaultValue(3600)->min(60)->end()
             ->end();
 
         return $treeBuilder;
