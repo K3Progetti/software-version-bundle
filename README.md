@@ -23,17 +23,36 @@ Apposta larghi, perché serve soprattutto sui progetti vecchi:
 composer require k3progetti/software-version-bundle
 ```
 
-In `config/bundles.php`, se non c'è già:
+Composer chiede se fidarsi del plugin del bundle: rispondi `y` (finisce in `allow-plugins` del
+`composer.json`, da committare). Il plugin poi:
 
-```php
-K3Progetti\SoftwareVersionBundle\SoftwareVersionBundle::class => ['all' => true],
-```
+- aggiunge il bundle in `config/bundles.php` e crea `config/packages/software_version.yaml`;
+- se nel `.env` manca `SOFTWARE_VERSION_KEY`, **chiede la password** e, se è giusta, ci scrive la chiave
+  dell'azienda. Invio a vuoto per saltare. Senza terminale (docker build, CI) non chiede niente.
 
-Nel `.env` (o nelle variabili del container) la chiave della tua azienda:
+Se non hai la password, la chiave la metti a mano nel `.env` (o nelle variabili del container):
 
 ```dotenv
 SOFTWARE_VERSION_KEY=svk_...
 ```
+
+> Nei progetti con Composer 2.2+ che fanno `composer install -n` (Dockerfile, CI) il plugin deve essere
+> già in `allow-plugins`, se no Composer si ferma:
+>
+> ```json
+> "config": { "allow-plugins": { "k3progetti/software-version-bundle": true } }
+> ```
+
+### Chiave cifrata nel bundle
+
+Il repo è pubblico, quindi la chiave sta in `resources/software_version_key.json` cifrata con la password
+(AES-256-GCM, PBKDF2 a 600.000 giri). Per cambiare chiave o password, nel repo del bundle:
+
+```bash
+php bin/encrypt-key.php
+```
+
+e poi una release. Usa una password lunga: il file lo può scaricare chiunque e provare password offline.
 
 La chiave è una per azienda e la trovi sul server delle versioni:
 
