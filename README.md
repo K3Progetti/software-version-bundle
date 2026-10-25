@@ -1,7 +1,17 @@
 # Software Version Bundle
 
 Manda al server delle versioni (l'app **Versioni software**) cosa gira **davvero** nel progetto:
-il PHP del processo (`PHP_VERSION`) e il Symfony installato in `vendor`.
+il PHP del processo (`PHP_VERSION`), il Symfony e i nostri pacchetti `k3progetti/*` installati in `vendor`.
+Con l'hostname della macchina: il server delle versioni riconosce il server dall'IP pubblico da cui
+arriva l'invio, e nell'app gli si dà un'etichetta (es. "Aruba 1").
+
+In Docker l'hostname è l'id del container: per vederlo giusto nell'app mettilo nel compose.
+
+```yaml
+services:
+  phpfpm:
+    hostname: aruba-web-1
+```
 
 GitHub dice com'è il codice e Docker Hub com'è l'immagine adesso, ma solo il progetto sa cosa è
 stato rilasciato: un'immagine ricompilata e non ancora rilasciata non cambia niente sul server.
@@ -108,6 +118,11 @@ che usa la sincronizzazione da GitHub.
 | `software-version:get-composer-info` | Mostra cosa manderebbe, senza mandarlo |
 
 ---
+
+## ⬆️ Dalla 3.0 alla 3.1
+
+- Oltre a PHP e Symfony manda `hostname`, `serverAddr` (l'IP visto dal progetto, in Docker quello del
+  container) e `k3Packages`, solo i pacchetti `k3progetti/*` con la versione installata.
 
 ## ⬆️ Dalla 2.x alla 3.0
 
