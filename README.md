@@ -122,7 +122,8 @@ che usa la sincronizzazione da GitHub.
 ## ⬆️ Dalla 3.0 alla 3.1
 
 - Oltre a PHP e Symfony manda `hostname`, `serverAddr` (l'IP visto dal progetto, in Docker quello del
-  container) e `k3Packages`, solo i pacchetti `k3progetti/*` con la versione installata.
+  container) e `k3Packages`: i pacchetti `k3progetti/*` del `require` del composer.json con la versione
+  installata (non quelli che arrivano perché li chiede un altro, come doctrine-repository dal jwt-bundle).
 
 ## ⬆️ Dalla 2.x alla 3.0
 

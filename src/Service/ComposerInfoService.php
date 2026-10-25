@@ -25,13 +25,10 @@ final class ComposerInfoService
     public function getInfo(): array
     {
         $name = null;
-        $path = $this->kernel->getProjectDir() . '/composer.json';
-        if (is_file($path)) {
-            $json = json_decode((string)file_get_contents($path), true);
-            if (is_array($json) && isset($json['name'])) {
-                // Come la sync del server, che il progetto lo ritrova per nome
-                $name = str_replace('template/', '', (string)$json['name']);
-            }
+        $json = $this->composerJson();
+        if (isset($json['name'])) {
+            // Come la sync del server, che il progetto lo ritrova per nome
+            $name = str_replace('template/', '', (string)$json['name']);
         }
 
         return [
@@ -44,18 +41,38 @@ final class ComposerInfoService
             'hostname' => gethostname() ?: null,
             // Solo un'informazione: il server lo riconosce dall'IP pubblico da cui arriva l'invio
             'serverAddr' => isset($_SERVER['SERVER_ADDR']) ? (string)$_SERVER['SERVER_ADDR'] : null,
-            'k3Packages' => $this->k3Packages(),
+            'k3Packages' => $this->k3Packages(isset($json['require']) && is_array($json['require']) ? $json['require'] : []),
         ];
     }
 
-    /**
-     * I nostri pacchetti (k3progetti/...) con la versione installata, es. ["k3progetti/jwt-bundle" => "4.1.0"]
-     */
-    private function k3Packages(): array
+    private function composerJson(): array
     {
+        $path = $this->kernel->getProjectDir() . '/composer.json';
+        if (!is_file($path)) {
+            return [];
+        }
+        $json = json_decode((string)file_get_contents($path), true);
+
+        return is_array($json) ? $json : [];
+    }
+
+    /**
+     * I nostri pacchetti (k3progetti/...) del require del progetto con la versione installata,
+     * es. ["k3progetti/jwt-bundle" => "4.1.0"]. Quelli che arrivano perché li chiede un altro
+     * (doctrine-repository dal jwt-bundle) no: nel composer.json non ci sono
+     */
+    private function k3Packages(array $require): array
+    {
+        $required = [];
+        foreach (array_keys($require) as $name) {
+            if (stripos((string)$name, 'k3progetti/') === 0) {
+                $required[strtolower((string)$name)] = true;
+            }
+        }
+
         $packages = [];
         foreach ($this->installedPackages() as $name => $version) {
-            if (stripos($name, 'k3progetti/') === 0) {
+            if (isset($required[strtolower($name)])) {
                 $packages[strtolower($name)] = $version;
             }
         }
